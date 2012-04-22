@@ -17,11 +17,13 @@ namespace Mini
     public class Ludum : Game
     {
         private const string BaseUrl = "http://localhost:82/";
+        private Texture2D cellMovingTexture;
+        private Texture2D cellTexture;
         private GraphicsDeviceManager graphics;
 
         private Vector2 mousePos;
         private Texture2D mouseTexture;
-        private Texture2D cellTexture;
+        private MoveCommand move;
         private SpriteBatch spriteBatch;
 
         public Ludum()
@@ -61,6 +63,7 @@ namespace Mini
             //load the image
             mouseTexture = Content.Load<Texture2D>("pointer");
             cellTexture = Content.Load<Texture2D>("cell");
+            cellMovingTexture = Content.Load<Texture2D>("cellMoving");
         }
 
         /// <summary>
@@ -87,15 +90,17 @@ namespace Mini
             MouseState mouseState = Mouse.GetState();
             mousePos.X = mouseState.X;
             mousePos.Y = mouseState.Y;
-
+            IsMouseVisible = true;
             // TODO: Add your update logic here
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Pressed && IsActive)
             {
                 using (var jsonClient = new JsonServiceClient(BaseUrl))
                 {
+                    jsonClient.SetCredentials("morten", "pass");
                     jsonClient.HttpMethod = "POST";
 
-                    var move = new MoveCommand {Vector = new ServiceModel.Vector2{X = mouseState.X, Y = mouseState.Y}};
+                    move = new MoveCommand {Vector = new ServiceModel.Vector2 {X = mouseState.X, Y = mouseState.Y}};
+                    jsonClient.AlwaysSendBasicAuthHeader = true;
                     jsonClient.SendOneWay(move);
                 }
             }
@@ -109,13 +114,33 @@ namespace Mini
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.LightBlue);
 
             spriteBatch.Begin();
             spriteBatch.GraphicsDevice.BlendState = BlendState.Opaque;
             spriteBatch.GraphicsDevice.BlendFactor = Color.White;
-            spriteBatch.Draw(mouseTexture, mousePos, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
-            spriteBatch.Draw(mouseTexture, mousePos, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+            var center = new Vector2
+                             {
+                                 X = Window.ClientBounds.Width/2,
+                                 Y = Window.ClientBounds.Height/2
+                             };
+            float offSetX = cellTexture.Width/2;
+            float offSetY = cellTexture.Height/2;
+            center.X -= offSetX;
+            center.Y -= offSetY;
+            if (move == null)
+            {
+                spriteBatch.Draw(cellTexture, center, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
+                                 0.1f);
+            }
+            else
+            {
+                spriteBatch.Draw(cellMovingTexture, center - new Vector2(100, 0), null, Color.Gray, 0f, Vector2.Zero,
+                                 1.0f, SpriteEffects.None,
+                                 0.12f);
+            }
+            spriteBatch.Draw(mouseTexture, mousePos, null, Color.Tomato, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
+                             0.0f);
             spriteBatch.End();
 
             base.Draw(gameTime);

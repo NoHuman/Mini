@@ -1,5 +1,8 @@
-﻿using Funq;
+﻿using System;
+using Funq;
 using ServiceInterface;
+using ServiceStack.ServiceHost;
+using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 
 namespace WebServiceConsole
@@ -27,6 +30,44 @@ namespace WebServiceConsole
                                        },
                                    WsdlServiceNamespace = "http://www.servicestack.net/types",
                                });
+
+            string AllowedUser = "morten";
+            this.RequestFilters.Add((req, res, dto) =>
+            {
+                var userPass = req.GetBasicAuthUserAndPassword();
+                if (userPass == null)
+                {
+                    res.ReturnAuthRequired();
+                    return;
+                }
+
+                var userName = userPass.Value.Key;
+                string AllowedPass = "pass";
+                if (userName == AllowedUser && userPass.Value.Value == AllowedPass)
+                {
+                    var sessionKey = userName + "/" + Guid.NewGuid().ToString("N");
+
+                    //set session for this request (as no cookies will be set on this request)
+                    req.Items["ss-session"] = sessionKey;
+                    res.SetPermanentCookie("ss-session", sessionKey);
+                }
+                else
+                {
+                    res.ReturnAuthRequired();
+                }
+
+            });
+            //this.RequestFilters.Add((req, res, dto) =>
+            //{
+            //    if (dto is Secure)
+            //    {
+            //        var sessionId = req.GetItemOrCookie("ss-session");
+            //        if (sessionId == null || sessionId.SplitOnFirst('/')[0] != AllowedUser)
+            //        {
+            //            res.ReturnAuthRequired();
+            //        }
+            //    }
+            //});
         }
     }
 }

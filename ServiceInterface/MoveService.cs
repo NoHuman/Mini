@@ -7,8 +7,9 @@ using ServiceStack.ServiceHost;
 
 namespace ServiceInterface
 {
-    public class MoveService : IService<MoveCommand> 
+    public class MoveService : IService<MoveCommand>
     {
+        private ICellRepository _cellRepository;
         static Vector2 vector = new Vector2{X=0, Y=0};
         public object Execute(MoveCommand request)
         {
@@ -17,5 +18,9 @@ namespace ServiceInterface
             Console.WriteLine("User is now at [{0}, {1}]", vector.X, vector.Y);
             return true;
         }
+    }
+
+    internal interface ICellRepository
+    {
     }
 }
