@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 using ServiceModel;
 using ServiceStack.ServiceClient.Web;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 #if WINDOWS_PHONE
 using Microsoft.Xna.Framework.Input.Touch;
@@ -20,11 +14,15 @@ namespace Mini
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Ludum : Microsoft.Xna.Framework.Game
+    public class Ludum : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
         private const string BaseUrl = "http://localhost:82/";
+        private GraphicsDeviceManager graphics;
+
+        private Vector2 mousePos;
+        private Texture2D mouseTexture;
+        private Texture2D cellTexture;
+        private SpriteBatch spriteBatch;
 
         public Ludum()
         {
@@ -32,7 +30,7 @@ namespace Mini
             Content.RootDirectory = "Content";
 
 #if WINDOWS_PHONE
-            // Frame rate is 30 fps by default for Windows Phone.
+    // Frame rate is 30 fps by default for Windows Phone.
             TargetElapsedTime = TimeSpan.FromTicks(333333);
 #endif
         }
@@ -45,7 +43,7 @@ namespace Mini
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            mousePos = Vector2.Zero;
 
             base.Initialize();
         }
@@ -59,7 +57,10 @@ namespace Mini
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+
+            //load the image
+            mouseTexture = Content.Load<Texture2D>("pointer");
+            cellTexture = Content.Load<Texture2D>("cell");
         }
 
         /// <summary>
@@ -80,16 +81,23 @@ namespace Mini
         {
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+                Exit();
+
+            // where is the mouse position now ???
+            MouseState mouseState = Mouse.GetState();
+            mousePos.X = mouseState.X;
+            mousePos.Y = mouseState.Y;
 
             // TODO: Add your update logic here
-            using (var jsonClient = new JsonServiceClient(BaseUrl))
+            if (mouseState.LeftButton == ButtonState.Pressed)
             {
-                jsonClient.HttpMethod = "GET";
+                using (var jsonClient = new JsonServiceClient(BaseUrl))
+                {
+                    jsonClient.HttpMethod = "POST";
 
-                GetPosition getPosition = new GetPosition{Id = 1};
-                var jsonResponse = jsonClient.Send<GetPositionResponse>(getPosition);
-                Console.WriteLine("[{0}, {1}]", jsonResponse.Position.X, jsonResponse.Position.Y);
+                    var move = new MoveCommand {Vector = new ServiceModel.Vector2{X = mouseState.X, Y = mouseState.Y}};
+                    jsonClient.SendOneWay(move);
+                }
             }
 
             base.Update(gameTime);
@@ -101,9 +109,14 @@ namespace Mini
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.GraphicsDevice.BlendState = BlendState.Opaque;
+            spriteBatch.GraphicsDevice.BlendFactor = Color.White;
+            spriteBatch.Draw(mouseTexture, mousePos, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(mouseTexture, mousePos, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0f);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
