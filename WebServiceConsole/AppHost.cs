@@ -31,6 +31,8 @@ namespace WebServiceConsole
                                    WsdlServiceNamespace = "http://www.servicestack.net/types",
                                });
 
+            container.Register<IUserRepository>(new UserRepository());
+
             string AllowedUser = "morten";
             this.RequestFilters.Add((req, res, dto) =>
             {
@@ -68,6 +70,14 @@ namespace WebServiceConsole
             //        }
             //    }
             //});
+        }
+    }
+
+    public class UserRepository : IUserRepository
+    {
+        public bool NameInUse(string name)
+        {
+            return false;
         }
     }
 }

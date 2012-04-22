@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mini", "Mini\Mini\Mini.csproj", "{42D7487E-706D-4C1A-8F7E-25D4A64C50E9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{55A4E51E-9E45-4513-BCC1-331B159F4DE7} = {55A4E51E-9E45-4513-BCC1-331B159F4DE7}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows Phone Copy of Mini", "Mini\Mini\Windows Phone Copy of Mini.csproj", "{8D2F41E8-35F3-4AC1-B8B3-16219FA51F47}"
 EndProject
@@ -10,6 +13,9 @@ EndProject
 Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MiniContent", "Mini\MiniContent\MiniContent.contentproj", "{D3A49281-FA73-4953-9D99-E2E1D770299C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServiceConsole", "WebServiceConsole\WebServiceConsole.csproj", "{2C77BEAC-A08D-42A2-BBE4-1E5AF2EBAE44}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C5C4BF07-76A2-497D-9F07-5314E18FABAD} = {C5C4BF07-76A2-497D-9F07-5314E18FABAD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceInterface", "ServiceInterface\ServiceInterface.csproj", "{55A4E51E-9E45-4513-BCC1-331B159F4DE7}"
 EndProject

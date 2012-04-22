@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mini.Controls;
+using Mini.Static;
 using ServiceModel;
 using ServiceStack.ServiceClient.Web;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -19,12 +21,17 @@ namespace Mini
         private const string BaseUrl = "http://localhost:82/";
         private Texture2D cellMovingTexture;
         private Texture2D cellTexture;
+        private SpriteFont font;
         private GraphicsDeviceManager graphics;
 
         private Vector2 mousePos;
         private Texture2D mouseTexture;
         private MoveCommand move;
+        private bool pulse;
         private SpriteBatch spriteBatch;
+        private Texture2D textBoxTexture;
+        private bool typeUsername;
+        private string username = string.Empty;
 
         public Ludum()
         {
@@ -46,7 +53,18 @@ namespace Mini
         protected override void Initialize()
         {
             mousePos = Vector2.Zero;
-
+            //txtUsername = new Rectangle(20, 20, 200, 20);
+            //txtEmail = new Rectangle(20, 20, 200, 20);
+            //txtPassword = new Rectangle(20, 20, 200, 20);
+            var txtUsername = new TextBox(this)
+                                  {
+                                      Element = new Rectangle(20, 20, 200, 20),
+                                      IsSelected = false,
+                                      Watermark = "username",
+                                      ActiveColor = Color.DarkGreen,
+                                      DeactiveColor = Color.DarkBlue
+                                  };
+            Components.Add(txtUsername);
             base.Initialize();
         }
 
@@ -61,9 +79,10 @@ namespace Mini
 
 
             //load the image
-            mouseTexture = Content.Load<Texture2D>("pointer");
-            cellTexture = Content.Load<Texture2D>("cell");
-            cellMovingTexture = Content.Load<Texture2D>("cellMoving");
+            mouseTexture = Content.Load<Texture2D>("Pointer");
+            cellTexture = Content.Load<Texture2D>("Cell");
+            textBoxTexture = Content.Load<Texture2D>("TextBox");
+            font = Content.Load<SpriteFont>("font");
         }
 
         /// <summary>
@@ -86,11 +105,13 @@ namespace Mini
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
+            KeyboardManager.Update();
+
             // where is the mouse position now ???
             MouseState mouseState = Mouse.GetState();
             mousePos.X = mouseState.X;
             mousePos.Y = mouseState.Y;
-            IsMouseVisible = true;
+
             // TODO: Add your update logic here
             if (mouseState.LeftButton == ButtonState.Pressed && IsActive)
             {
@@ -103,8 +124,18 @@ namespace Mini
                     jsonClient.AlwaysSendBasicAuthHeader = true;
                     jsonClient.SendOneWay(move);
                 }
+                foreach (IGameComponent component in Components)
+                {
+                    if (component is TextBox)
+                    {
+                        var textBox = component as TextBox;
+                        textBox.IsSelected = textBox.Element.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1));
+                    }
+                }
             }
+            //typeUsername = txtUsername.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1));
 
+            pulse = (gameTime.TotalGameTime.Milliseconds/500%2 == 0);
             base.Update(gameTime);
         }
 
@@ -117,8 +148,6 @@ namespace Mini
             GraphicsDevice.Clear(Color.LightBlue);
 
             spriteBatch.Begin();
-            spriteBatch.GraphicsDevice.BlendState = BlendState.Opaque;
-            spriteBatch.GraphicsDevice.BlendFactor = Color.White;
             var center = new Vector2
                              {
                                  X = Window.ClientBounds.Width/2,
@@ -128,22 +157,16 @@ namespace Mini
             float offSetY = cellTexture.Height/2;
             center.X -= offSetX;
             center.Y -= offSetY;
-            if (move == null)
-            {
-                spriteBatch.Draw(cellTexture, center, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
-                                 0.1f);
-            }
-            else
-            {
-                spriteBatch.Draw(cellMovingTexture, center - new Vector2(100, 0), null, Color.Gray, 0f, Vector2.Zero,
-                                 1.0f, SpriteEffects.None,
-                                 0.12f);
-            }
-            spriteBatch.Draw(mouseTexture, mousePos, null, Color.Tomato, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
-                             0.0f);
+            spriteBatch.Draw(cellTexture, center, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
+                             0.1f);
             spriteBatch.End();
 
             base.Draw(gameTime);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(mouseTexture, mousePos, null, Color.Tomato, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
+                             0.0f);
+            spriteBatch.End();
         }
     }
 }
