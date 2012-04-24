@@ -60,8 +60,10 @@ namespace Mini
                                       Element = new Rectangle(20, 20, 200, 20),
                                       IsSelected = false,
                                       Watermark = "username",
+                                      MaxCharacters = 16,
                                       ActiveColor = Color.DarkGreen,
-                                      DeactiveColor = Color.DarkBlue
+                                      DeactiveColor = Color.DarkBlue,
+                                      Pulse = new Pulse(500, "_", "")
                                   };
             Components.Add(txtUsername);
             TextInput.Init(Window.Handle);

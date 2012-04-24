@@ -16,6 +16,9 @@ namespace Mini.Controls
         public string Text { get; set; }
         public string Watermark { get; set; }
         public bool IsSelected { get; set; }
+        public int MaxCharacters { get; set; }
+
+        public Pulse Pulse { get; set; }
 
         public TextBox(Game game) : base(game)
         {
@@ -43,6 +46,10 @@ namespace Mini.Controls
                     {
                         Text = Text.Substring(0, Text.Length - 1);
                     }
+                }
+                if(Text.Length > MaxCharacters)
+                {
+                    Text = Text.Substring(0, MaxCharacters);
                 }
             }
         }
