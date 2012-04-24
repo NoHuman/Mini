@@ -65,6 +65,7 @@ namespace Mini
                                       DeactiveColor = Color.DarkBlue
                                   };
             Components.Add(txtUsername);
+            TextInput.Init(Window.Handle);
             base.Initialize();
         }
 

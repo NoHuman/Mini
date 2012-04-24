@@ -34,12 +34,17 @@ namespace Mini.Controls
 
         public override void Update(GameTime gameTime)
         {
-            var keys = KeyboardManager.PressedKeys();
-            if (keys.Length > 0)
+            if (IsSelected)
             {
-                foreach (var key in keys)
+                TextInput textInput = TextInput.Instance;
+                Text += textInput.Buffer;
+                textInput.clearBuffer();
+                if (textInput.BackSpace)
                 {
-                    Text += key.ToString();
+                    if (Text.Length > 0)
+                    {
+                        Text = Text.Substring(0, Text.Length - 1);
+                    }
                 }
             }
         }
