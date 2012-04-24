@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Mini.Controls;
-using Mini.Static;
 using ServiceModel;
 using ServiceStack.ServiceClient.Web;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -136,8 +135,6 @@ namespace Mini
 
             pulse = (gameTime.TotalGameTime.Milliseconds/500%2 == 0);
             base.Update(gameTime);
-
-            KeyboardManager.Update(gameTime);
         }
 
         /// <summary>

@@ -96,7 +96,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Ludum.cs" />
-    <Compile Include="Static\KeyboardManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
