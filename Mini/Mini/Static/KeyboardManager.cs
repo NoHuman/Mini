@@ -1,54 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-
-namespace Mini.Static
+﻿namespace Mini.Static
 {
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Input;
+
     internal static class KeyboardManager
     {
-        private static TimeSpan _duration = new TimeSpan(0, 0, 0, 0, 50);
-        private static Dictionary<Keys, DateTime> _keys = new Dictionary<Keys, DateTime>();
+        private static TimeSpan _duration = new TimeSpan(0, 0, 0, 0, 350);
+        private static Dictionary<Keys, TimeSpan> _prevKeys = new Dictionary<Keys, TimeSpan>();
+        private static List<Keys> _keys = new List<Keys>();
 
         public static Keys[] PressedKeys()
         {
-            var pressedKeys = new List<Keys>();
-            foreach (var key in _keys)
-            {
-                if (IsKeyDown(key.Key) && (DateTime.Now - key.Value) > _duration)
-                {
-                    pressedKeys.Add(key.Key);
-                }
-            }
-            return pressedKeys.ToArray();
+            return _keys.ToArray();
         }
 
-        public static bool IsKeyDown(Keys key)
+        public static void Update(GameTime time)
         {
-            if (Keyboard.GetState().IsKeyDown(key))
+            _keys = new List<Keys>();
+            foreach (var key in Keyboard.GetState().GetPressedKeys())
             {
-                var pressed = _keys[key];
-                return (DateTime.Now - pressed) > _duration;
-            }
-            return false;
-        }
-
-        public static void Update()
-        {
-            foreach (var key in _keys)
-            {
-                if (!Keyboard.GetState().IsKeyDown(key.Key) || (DateTime.Now - key.Value) > _duration)
+                if (!_prevKeys.ContainsKey(key))
                 {
-                    _keys.Remove(key.Key);
+                    _keys.Add(key);
+                    _prevKeys[key] = time.TotalGameTime;
                 }
-            }
-            foreach (var pressedKey in Keyboard.GetState().GetPressedKeys())
-            {
-                if (!_keys.ContainsKey(pressedKey))
+                else
                 {
-                    _keys[pressedKey] = DateTime.Now;
+                    if (time.TotalGameTime - _prevKeys[key] > _duration)
+                    {
+                        _prevKeys[key] = time.TotalGameTime;
+                        _keys.Add(key);
+                    }
                 }
             }
         }

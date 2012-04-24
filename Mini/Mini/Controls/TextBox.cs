@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Mini.Controls
 {
+    using Mini.Static;
+
     public class TextBox : DrawableGameComponent
     {
         private Game _game;
@@ -32,17 +34,20 @@ namespace Mini.Controls
 
         public override void Update(GameTime gameTime)
         {
-            var keys = Keyboard.GetState().GetPressedKeys();
+            var keys = KeyboardManager.PressedKeys();
             if (keys.Length > 0)
             {
-                
+                foreach (var key in keys)
+                {
+                    Text += key.ToString();
+                }
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
-            var value = string.Format("{0}", Text ?? Watermark);
+            var value = string.Format("{0}", Text ?? Watermark).ToUpper();
             var color = IsSelected ? ActiveColor : DeactiveColor;
             spriteBatch.Draw(texture, Element, color);
             spriteBatch.DrawString(font, value, new Vector2(22, 20), Color.White);

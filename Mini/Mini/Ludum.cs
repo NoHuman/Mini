@@ -105,8 +105,6 @@ namespace Mini
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
-            KeyboardManager.Update();
-
             // where is the mouse position now ???
             MouseState mouseState = Mouse.GetState();
             mousePos.X = mouseState.X;
@@ -115,15 +113,15 @@ namespace Mini
             // TODO: Add your update logic here
             if (mouseState.LeftButton == ButtonState.Pressed && IsActive)
             {
-                using (var jsonClient = new JsonServiceClient(BaseUrl))
-                {
-                    jsonClient.SetCredentials("morten", "pass");
-                    jsonClient.HttpMethod = "POST";
+                //using (var jsonClient = new JsonServiceClient(BaseUrl))
+                //{
+                //    jsonClient.SetCredentials("morten", "pass");
+                //    jsonClient.HttpMethod = "POST";
 
-                    move = new MoveCommand {Vector = new ServiceModel.Vector2 {X = mouseState.X, Y = mouseState.Y}};
-                    jsonClient.AlwaysSendBasicAuthHeader = true;
-                    jsonClient.SendOneWay(move);
-                }
+                //    move = new MoveCommand {Vector = new ServiceModel.Vector2 {X = mouseState.X, Y = mouseState.Y}};
+                //    jsonClient.AlwaysSendBasicAuthHeader = true;
+                //    jsonClient.SendOneWay(move);
+                //}
                 foreach (IGameComponent component in Components)
                 {
                     if (component is TextBox)
@@ -137,6 +135,8 @@ namespace Mini
 
             pulse = (gameTime.TotalGameTime.Milliseconds/500%2 == 0);
             base.Update(gameTime);
+
+            KeyboardManager.Update(gameTime);
         }
 
         /// <summary>
