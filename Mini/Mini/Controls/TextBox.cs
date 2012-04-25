@@ -18,7 +18,7 @@ namespace Mini.Controls
         public bool IsSelected { get; set; }
         public int MaxCharacters { get; set; }
 
-        public Pulse Pulse { get; set; }
+        public Pulse<string> Pulse { get; set; }
 
         public TextBox(Game game) : base(game)
         {
@@ -58,6 +58,7 @@ namespace Mini.Controls
         {
             spriteBatch.Begin();
             var value = string.Format("{0}", Text ?? Watermark);
+            value += Text != null && IsSelected ? Pulse.Next((int) gameTime.TotalGameTime.TotalMilliseconds) : "";
             var color = IsSelected ? ActiveColor : DeactiveColor;
             spriteBatch.Draw(texture, Element, color);
             spriteBatch.DrawString(font, value, new Vector2(22, 20), Color.White);

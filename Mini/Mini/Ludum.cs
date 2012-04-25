@@ -63,8 +63,10 @@ namespace Mini
                                       MaxCharacters = 16,
                                       ActiveColor = Color.DarkGreen,
                                       DeactiveColor = Color.DarkBlue,
-                                      Pulse = new Pulse(500, "_", "")
+                                      Pulse = new Pulse<string>(500)
                                   };
+            txtUsername.Pulse.Add("_");
+            txtUsername.Pulse.Add("");
             Components.Add(txtUsername);
             TextInput.Init(Window.Handle);
             base.Initialize();
@@ -137,6 +139,7 @@ namespace Mini
 
             pulse = (gameTime.TotalGameTime.Milliseconds/500%2 == 0);
             base.Update(gameTime);
+            TextInput.Instance.clearBuffer();
         }
 
         /// <summary>
