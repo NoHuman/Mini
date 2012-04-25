@@ -26,7 +26,6 @@ namespace Mini
         private Vector2 mousePos;
         private Texture2D mouseTexture;
         private MoveCommand move;
-        private bool pulse;
         private SpriteBatch spriteBatch;
         private Texture2D textBoxTexture;
         private bool typeUsername;
@@ -135,9 +134,7 @@ namespace Mini
                     }
                 }
             }
-            //typeUsername = txtUsername.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1));
 
-            pulse = (gameTime.TotalGameTime.Milliseconds/500%2 == 0);
             base.Update(gameTime);
             TextInput.Instance.clearBuffer();
         }
