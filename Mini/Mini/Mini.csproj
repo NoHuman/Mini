@@ -91,6 +91,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\Pulse.cs" />
     <Compile Include="Controls\TextBox.cs" />
     <Compile Include="Controls\TextInput.cs" />

@@ -137,19 +137,19 @@ namespace Mini
         {
             GraphicsDevice.Clear(Color.LightBlue);
 
-            spriteBatch.Begin();
-            var center = new Vector2
-                             {
-                                 X = Window.ClientBounds.Width/2,
-                                 Y = Window.ClientBounds.Height/2
-                             };
-            float offSetX = cellTexture.Width/2;
-            float offSetY = cellTexture.Height/2;
-            center.X -= offSetX;
-            center.Y -= offSetY;
-            spriteBatch.Draw(cellTexture, center, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
-                             0.1f);
-            spriteBatch.End();
+            //spriteBatch.Begin();
+            //var center = new Vector2
+            //                 {
+            //                     X = Window.ClientBounds.Width/2,
+            //                     Y = Window.ClientBounds.Height/2
+            //                 };
+            //float offSetX = cellTexture.Width/2;
+            //float offSetY = cellTexture.Height/2;
+            //center.X -= offSetX;
+            //center.Y -= offSetY;
+            //spriteBatch.Draw(cellTexture, center, null, Color.White, 0f, Vector2.Zero, 1.0f, SpriteEffects.None,
+            //                 0.1f);
+            //spriteBatch.End();
 
             base.Draw(gameTime);
 

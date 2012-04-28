@@ -13,7 +13,8 @@
         protected List<DrawableGameComponent> Components { get; set; }
         private SpriteBatch spriteBatch { get; set; }
         private SpriteFont font { get; set; }
-        private Texture2D texture { get; set; }
+        private Texture2D textboxTexture { get; set; }
+        private Texture2D buttonTexture { get; set; }
 
         public LoginScreen(Game game) : base(game)
         {
@@ -29,37 +30,63 @@
             var txtPassword = TxtPassword();
             txtPassword.Initialize();
             Components.Add(txtPassword);
+            var loginButton = BtnLogin();
+            loginButton.Initialize();
+            loginButton.OnClick += ClickLogin;
+            Components.Add(loginButton);
             base.Initialize();
         }
-
         protected override void LoadContent()
         {
             base.LoadContent();
 
             spriteBatch = new SpriteBatch(game.GraphicsDevice);
             font = game.Content.Load<SpriteFont>("font");
-            texture = game.Content.Load<Texture2D>("TextBox");
+            textboxTexture = game.Content.Load<Texture2D>("TextBox");
+            buttonTexture = game.Content.Load<Texture2D>("Button");
             foreach (var component in Components)
             {
                 if (component is TextBox)
                 {
                     var textBox = component as TextBox;
                     textBox.font = font;
-                    textBox.texture = texture;
+                    textBox.texture = textboxTexture;
+                }
+                if (component is Button)
+                {
+                    var textBox = component as Button;
+                    textBox.font = font;
+                    textBox.texture = textboxTexture;
                 }
             }
         }
         public override void Update(GameTime gameTime)
         {
             var mouseState = Mouse.GetState();
-            if (mouseState.LeftButton == ButtonState.Pressed && Enabled)
+            foreach (var component in Components)
             {
-                foreach (var component in Components)
+                if (component is TextBox)
                 {
-                    if (component is TextBox)
+                    if (mouseState.LeftButton == ButtonState.Pressed && Enabled)
                     {
                         var textBox = component as TextBox;
                         textBox.IsSelected = textBox.Element.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1));
+                    }
+                }
+                if (component is Button)
+                {
+                    if (mouseState.LeftButton == ButtonState.Pressed && Enabled)
+                    {
+                        var button = component as Button;
+                        if (button.Element.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)))
+                        {
+                            button.TriggerClick();
+                        }
+                    }
+                    else if (Enabled)
+                    {
+                        var button = component as Button;
+                        button.IsSelected = button.Element.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1));
                     }
                 }
             }
@@ -75,8 +102,16 @@
             var enter = TextInput.Instance.Enter;
             if (enter)
             {
-                
+                TryLogin();
             }
+        }
+        public void ClickLogin()
+        {
+            TryLogin();
+        }
+
+        private void TryLogin()
+        {
         }
 
         private void TabWasPressed()
@@ -159,5 +194,17 @@
             txtPassword.Pulse.Add("");
             return txtPassword;
         }
+
+        private Button BtnLogin()
+        {
+            return new Button(game)
+                       {
+                           Element = new Rectangle(70, 80, 100, 30),
+                           Text = "Login",
+                           ActiveColor = Color.DarkGreen,
+                           DeactiveColor = Color.DarkBlue
+                       };
+        }
+
     }
 }
