@@ -12,6 +12,8 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Mini
 {
+    using Mini.Screens;
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -54,20 +56,8 @@ namespace Mini
             //txtUsername = new Rectangle(20, 20, 200, 20);
             //txtEmail = new Rectangle(20, 20, 200, 20);
             //txtPassword = new Rectangle(20, 20, 200, 20);
-            var txtUsername = new TextBox(this)
-                                  {
-                                      Element = new Rectangle(20, 20, 200, 20),
-                                      IsSelected = false,
-                                      Watermark = "username",
-                                      MaxCharacters = 16,
-                                      ActiveColor = Color.DarkGreen,
-                                      DeactiveColor = Color.DarkBlue,
-                                      Pulse = new Pulse<string>(500)
-                                  };
-            txtUsername.Pulse.Add("_");
-            txtUsername.Pulse.Add("");
-            Components.Add(txtUsername);
             TextInput.Init(Window.Handle);
+            Components.Add(new LoginScreen(this));
             base.Initialize();
         }
 

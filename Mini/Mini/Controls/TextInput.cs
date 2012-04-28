@@ -33,6 +33,8 @@
 
         private string buffer = "";
         private bool backSpace;
+        private bool tab;
+        private bool enter;
 
         public string Buffer
         {
@@ -49,12 +51,30 @@
             }
         }
 
+        public bool Tab
+        {
+            get
+            {
+                var t = tab;
+                tab = false;
+                return t;
+            }
+        }
+
+        public bool Enter
+        {
+            get
+            {
+                var e = enter;
+                enter = false;
+                return e;
+            }
+        }
+
         public void clearBuffer()
         {
             buffer = "";
         }
-
-        #region Win32
 
         /// <summary>
         /// Types of hook that can be installed using the SetWindwsHookEx function.
@@ -144,10 +164,6 @@
         [DllImport("kernel32.dll")]
         public static extern int GetCurrentThreadId();
 
-        #endregion
-
-        #region Hook management and class construction.
-
         /// <summary>Handle for the created hook.</summary>
         private readonly IntPtr HookHandle;
 
@@ -169,10 +185,6 @@
             // Remove the hook.
             if (this.HookHandle != IntPtr.Zero) UnhookWindowsHookEx(this.HookHandle);
         }
-
-        #endregion
-
-        #region Message processing
 
         private int ProcessMessages(int nCode, int wParam, ref Message msg)
         {
@@ -201,10 +213,6 @@
             return CallNextHookEx(0, nCode, wParam, ref msg);
         }
 
-        #endregion
-
-        #region Events
-
         public event KeyEventHandler KeyUp;
 
         protected virtual void OnKeyUp(KeyEventArgs e)
@@ -221,6 +229,7 @@
 
         public event KeyPressEventHandler KeyPress;
 
+        private static string last = "";
         protected virtual void OnKeyPress(KeyPressEventArgs e)
         {
             if (this.KeyPress != null) this.KeyPress(this, e);
@@ -228,12 +237,19 @@
             {
                 backSpace = true;
             }
+            else if (e.KeyChar.GetHashCode().ToString() == "851981")
+            {
+                enter = true;
+            }
+            else if (e.KeyChar.GetHashCode().ToString() == "589833")
+            {
+                tab = true;
+            }
             else
             {
                 buffer += e.KeyChar;
             }
+            last = e.KeyChar.GetHashCode().ToString();
         }
-
-        #endregion
     }
 }
