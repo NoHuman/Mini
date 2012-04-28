@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 namespace Mini
 {
     using Mini.Screens;
+    using ServiceInterface;
 
     /// <summary>
     /// This is the main type for your game
@@ -32,6 +33,7 @@ namespace Mini
         private Texture2D textBoxTexture;
         private bool typeUsername;
         private string username = string.Empty;
+        private LoginScreen _loginScreen;
 
         public Ludum()
         {
@@ -57,8 +59,34 @@ namespace Mini
             //txtEmail = new Rectangle(20, 20, 200, 20);
             //txtPassword = new Rectangle(20, 20, 200, 20);
             TextInput.Init(Window.Handle);
-            Components.Add(new LoginScreen(this));
+            _loginScreen = new LoginScreen(this);
+            _loginScreen.AcceptedCredentials += PerformLogin;
+            Components.Add(_loginScreen);
             base.Initialize();
+        }
+
+        private bool PerformLogin(LoginEventArgs args)
+        {
+            using (var jsonClient = new JsonServiceClient(BaseUrl))
+            {
+                //jsonClient.SetCredentials("morten", "pass");
+                jsonClient.HttpMethod = "POST";
+
+                var login = new LoginUser
+                                {
+                                    Username = args.Username,
+                                    Password = args.Password,
+                                };
+                var loginResponse = jsonClient.Send<LoginUserResponse>(login);
+                if (loginResponse.Successful)
+                {
+                    _loginScreen.Enabled = false;
+                    _loginScreen.Visible = false;
+                }
+                //jsonClient.AlwaysSendBasicAuthHeader = true;
+                //jsonClient.SendOneWay(move);
+            }
+            return true;
         }
 
         /// <summary>
@@ -106,15 +134,6 @@ namespace Mini
             // TODO: Add your update logic here
             if (mouseState.LeftButton == ButtonState.Pressed && IsActive)
             {
-                //using (var jsonClient = new JsonServiceClient(BaseUrl))
-                //{
-                //    jsonClient.SetCredentials("morten", "pass");
-                //    jsonClient.HttpMethod = "POST";
-
-                //    move = new MoveCommand {Vector = new ServiceModel.Vector2 {X = mouseState.X, Y = mouseState.Y}};
-                //    jsonClient.AlwaysSendBasicAuthHeader = true;
-                //    jsonClient.SendOneWay(move);
-                //}
                 foreach (IGameComponent component in Components)
                 {
                     if (component is TextBox)

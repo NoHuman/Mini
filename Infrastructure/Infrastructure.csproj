@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{55A4E51E-9E45-4513-BCC1-331B159F4DE7}</ProjectGuid>
+    <ProjectGuid>{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServiceInterface</RootNamespace>
-    <AssemblyName>ServiceInterface</AssemblyName>
+    <RootNamespace>Infrastructure</RootNamespace>
+    <AssemblyName>Infrastructure</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,12 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ServiceStack.Common">
-      <HintPath>..\packages\ServiceStack.Common.3.7.3\lib\net35\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\packages\ServiceStack.Common.3.7.3\lib\net35\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,17 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GetPositionService.cs" />
-    <Compile Include="IUserRepository.cs" />
-    <Compile Include="LoginUserResponse.cs" />
-    <Compile Include="MoveService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserService.cs" />
+    <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ServiceModel\ServiceModel.csproj">
-      <Project>{C5C4BF07-76A2-497D-9F07-5314E18FABAD}</Project>
-      <Name>ServiceModel</Name>
+    <ProjectReference Include="..\ServiceInterface\ServiceInterface.csproj">
+      <Project>{55A4E51E-9E45-4513-BCC1-331B159F4DE7}</Project>
+      <Name>ServiceInterface</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

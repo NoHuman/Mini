@@ -1,5 +1,6 @@
 ﻿namespace Mini.Screens
 {
+    using System;
     using System.Collections.Generic;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
@@ -8,6 +9,9 @@
 
     public class LoginScreen : DrawableGameComponent
     {
+        private TextBox _txtUsername;
+        private TextBox _txtPassword;
+        private Button _loginButton;
         protected Game game { get; set; }
 
         protected List<DrawableGameComponent> Components { get; set; }
@@ -24,18 +28,19 @@
 
         public override void Initialize()
         {
-            var txtUsername = TxtUsername();
-            txtUsername.Initialize();
-            Components.Add(txtUsername);
-            var txtPassword = TxtPassword();
-            txtPassword.Initialize();
-            Components.Add(txtPassword);
-            var loginButton = BtnLogin();
-            loginButton.Initialize();
-            loginButton.OnClick += ClickLogin;
-            Components.Add(loginButton);
+            _txtUsername = TxtUsername();
+            _txtUsername.Initialize();
+            Components.Add(_txtUsername);
+            _txtPassword = TxtPassword();
+            _txtPassword.Initialize();
+            Components.Add(_txtPassword);
+            _loginButton = BtnLogin();
+            _loginButton.Initialize();
+            _loginButton.OnClick += ClickLogin;
+            Components.Add(_loginButton);
             base.Initialize();
         }
+
         protected override void LoadContent()
         {
             base.LoadContent();
@@ -60,6 +65,7 @@
                 }
             }
         }
+
         public override void Update(GameTime gameTime)
         {
             var mouseState = Mouse.GetState();
@@ -97,6 +103,7 @@
                 component.Update(gameTime);
             }
         }
+
         private void EnterWasPressed()
         {
             var enter = TextInput.Instance.Enter;
@@ -105,21 +112,48 @@
                 TryLogin();
             }
         }
+
         public void ClickLogin()
         {
             TryLogin();
         }
 
-        private void TryLogin()
+        private bool TryLogin()
         {
+            if (_txtPassword.Text == null)
+            {
+                return false;
+            }
+            if (_txtPassword.Text.Length < 8)
+            {
+                return false;
+            }
+            if (_txtUsername.Text == null)
+            {
+                return false;
+            }
+            if (AcceptedCredentials != null)
+            {
+                var args = new LoginEventArgs
+                               {
+                                   Username = _txtUsername.Text,
+                                   Password = _txtPassword.Text
+                               };
+                AcceptedCredentials(args);
+            }
+            return true;
         }
+
+        public delegate bool Success(LoginEventArgs args);
+
+        public event Success AcceptedCredentials;
 
         private void TabWasPressed()
         {
             var tab = TextInput.Instance.Tab;
             if (tab)
             {
-                bool selectNext = false;
+                var selectNext = false;
                 TextBox first = null;
                 var hasSelection = false;
                 foreach (var component in Components)
@@ -163,15 +197,15 @@
         private TextBox TxtUsername()
         {
             var txtUsername = new TextBox(game)
-            {
-                Element = new Rectangle(20, 20, 200, 20),
-                IsSelected = false,
-                Watermark = "username (a-z,0-9)",
-                MaxCharacters = 16,
-                ActiveColor = Color.DarkGreen,
-                DeactiveColor = Color.DarkBlue,
-                Pulse = new Pulse<string>(500)
-            };
+                                  {
+                                      Element = new Rectangle(20, 20, 200, 20),
+                                      IsSelected = false,
+                                      Watermark = "username (a-z,0-9)",
+                                      MaxCharacters = 16,
+                                      ActiveColor = Color.DarkGreen,
+                                      DeactiveColor = Color.DarkBlue,
+                                      Pulse = new Pulse<string>(500)
+                                  };
             txtUsername.Pulse.Add("_");
             txtUsername.Pulse.Add("");
             return txtUsername;
@@ -201,10 +235,15 @@
                        {
                            Element = new Rectangle(70, 80, 100, 30),
                            Text = "Login",
-                           ActiveColor = Color.DarkGreen,
-                           DeactiveColor = Color.DarkBlue
+                           ActiveColor = Color.DarkGoldenrod,
+                           DeactiveColor = Color.DarkCyan
                        };
         }
+    }
 
+    public class LoginEventArgs : EventArgs
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -105,6 +105,10 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ServiceInterface\ServiceInterface.csproj">
+      <Project>{55A4E51E-9E45-4513-BCC1-331B159F4DE7}</Project>
+      <Name>ServiceInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ServiceModel\ServiceModel.csproj">
       <Project>{C5C4BF07-76A2-497D-9F07-5314E18FABAD}</Project>
       <Name>ServiceModel</Name>

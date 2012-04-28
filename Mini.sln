@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windows Phone Copy of Mini"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of Mini", "Mini\Mini\Xbox 360 Copy of Mini.csproj", "{E631409A-CF46-40DC-80A1-0A9A53A85217}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MiniContent", "Mini\MiniContent\MiniContent.contentproj", "{D3A49281-FA73-4953-9D99-E2E1D770299C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniContent", "Mini\MiniContent\MiniContent.contentproj", "{D3A49281-FA73-4953-9D99-E2E1D770299C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServiceConsole", "WebServiceConsole\WebServiceConsole.csproj", "{2C77BEAC-A08D-42A2-BBE4-1E5AF2EBAE44}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceInterface", "ServiceInterface\ServiceInterface.csproj", "{55A4E51E-9E45-4513-BCC1-331B159F4DE7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceModel", "ServiceModel\ServiceModel.csproj", "{C5C4BF07-76A2-497D-9F07-5314E18FABAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +145,20 @@ Global
 		{C5C4BF07-76A2-497D-9F07-5314E18FABAD}.Release|Windows Phone.ActiveCfg = Release|Any CPU
 		{C5C4BF07-76A2-497D-9F07-5314E18FABAD}.Release|x86.ActiveCfg = Release|Any CPU
 		{C5C4BF07-76A2-497D-9F07-5314E18FABAD}.Release|Xbox 360.ActiveCfg = Release|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Debug|Windows Phone.ActiveCfg = Debug|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Debug|Xbox 360.ActiveCfg = Debug|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Release|Windows Phone.ActiveCfg = Release|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Release|x86.ActiveCfg = Release|Any CPU
+		{4E0387E6-1E29-4F87-ADBC-89A94AC8E769}.Release|Xbox 360.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
